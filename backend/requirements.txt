@@ -30,3 +30,4 @@ pydantic-settings>=2.0.0
 
 # Optional (for vector DB later — install separately if needed)
 # chromadb==0.4.24
+tokenizers==0.13.3
