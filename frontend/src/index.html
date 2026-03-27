@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TruthShield AI</title>
+</head>
+
+<body>
+
+<!-- AUTH SECTION -->
+<div id="auth-section">
+
+  <h3>Register</h3>
+  <input id="reg_email" placeholder="Email" />
+  <input id="reg_password" type="password" placeholder="Password" />
+  <button onclick="register()">Register</button>
+
+  <h3>Login</h3>
+  <input id="email" placeholder="Email" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+
+</div>
+
+<!-- APP SECTION -->
+<div id="app-section" style="display:none;">
+
+  <h2>🧠 TruthShield AI</h2>
+  <h3>Multi-Agent AI System for Fact Verification</h3>
+
+  <h4>Analyze Claim</h4>
+
+  <textarea id="text" rows="4" placeholder="Paste news or claim here..."></textarea>
+
+  <button onclick="detect()">🚀 Run AI Analysis</button>
+  <button onclick="logout()">Logout</button>
+
+  <!-- AI PROCESS STEPS -->
+  <div id="pipeline" style="margin-top:15px; display:none;">
+    <p id="step1">🔍 Extracting claims...</p>
+    <p id="step2">🌐 Gathering evidence...</p>
+    <p id="step3">🧠 Fact-checking...</p>
+    <p id="step4">📊 Generating verdict...</p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result-box"></div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
