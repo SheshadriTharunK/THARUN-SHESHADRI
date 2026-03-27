@@ -6,11 +6,11 @@ from config_reader import *
 
 def build_model() -> Model:
 
-    model_name = settings.llm.name
-    api_key = settings.llm.api_key
-    base_url = settings.llm.base_url
-    temperature = settings.llm.temperature
-    max_tokens = settings.llm.max_tokens
+    model_name = "groq:llama-3.3-70b-versatile"
+    api_key = "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"
+    base_url = ""
+    temperature = 0.0
+    max_tokens = 1024
     model_settings = ModelSettings(
         temperature=temperature,
         max_tokens=max_tokens,

@@ -13,9 +13,10 @@ load_dotenv(override = True)
 class FactChecker:
     def __init__(self):
         # Only configure logfire if token is provided
-        if settings.logfire.token:
-            print("Configuring Logfire for observability...", settings.logfire.token)
-            logfire.configure(token=settings.logfire.token)
+        logfire_token = "pylf_v2_eu_31577b26-b670-48b3-b5f5-25c1a3e7637d_Vk1YPjv6lqBTf5qlFr15jjTpByJ0L3gjkhRKXgYvZk3Z"
+        if logfire_token :
+            print("Configuring Logfire for observability...", logfire_token )
+            logfire.configure(token=logfire_token)
             time.sleep(1)
             logfire.instrument_pydantic_ai()
             logfire.instrument_openai()
