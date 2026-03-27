@@ -1,4 +1,4 @@
-from config_reader import *
+# from config_reader import *
 from text_agent import claim_extractor_agent, ClaimsExtraction, parse_claims_output, fallback_claims_extraction
 from fact_agent import fact_planner_agent, evidence_searcher_agent, VerificationPlan, parse_verification_plan, fallback_verification_plan
 from reasoning_agent import verdict_agent, FactCheckReport, parse_verdict_output, fallback_verdict
@@ -6,14 +6,14 @@ import asyncio
 import logfire
 import time
 from dotenv import load_dotenv
-
+import os 
 load_dotenv(override = True)
 
 
 class FactChecker:
     def __init__(self):
         # Only configure logfire if token is provided
-        logfire_token = "pylf_v2_eu_31577b26-b670-48b3-b5f5-25c1a3e7637d_Vk1YPjv6lqBTf5qlFr15jjTpByJ0L3gjkhRKXgYvZk3Z"
+        logfire_token = os.getenv("logfire_token")
         if logfire_token :
             print("Configuring Logfire for observability...", logfire_token )
             logfire.configure(token=logfire_token)

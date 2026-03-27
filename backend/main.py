@@ -6,9 +6,9 @@ from database import engine
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="TruthShield AI")
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+# from fastapi.staticfiles import StaticFiles
 
-app.mount("/", StaticFiles(directory="frontend/build", html=True), name="frontend")
+# app.mount("/", StaticFiles(directory="truthshield-ai/frontend/build", html=True), name="frontend")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

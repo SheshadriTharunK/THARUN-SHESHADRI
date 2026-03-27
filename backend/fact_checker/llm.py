@@ -1,13 +1,16 @@
 from typing import cast
 from pydantic_ai.models import Model
 from pydantic_ai.settings import ModelSettings
-from config_reader import *
+# from config_reader import *
+from dotenv import load_dotenv
+import os 
 
+load_dotenv(override = True)
 
 def build_model() -> Model:
 
     model_name = "groq:llama-3.3-70b-versatile"
-    api_key = "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"
+    api_key = os.getenv("GROQ_API_KEY")
     base_url = ""
     temperature = 0.0
     max_tokens = 1024
