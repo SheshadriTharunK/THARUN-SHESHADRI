@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+
 from database import SessionLocal
 import models
 from auth import hash_password, verify_password, create_access_token
-from pydantic import BaseModel
+from services.email_service import send_welcome_email
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -30,6 +32,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         email=user.email,
         password=hash_password(user.password)
     )
+    send_welcome_email(user.email)
 
     db.add(new_user)
     db.commit()
