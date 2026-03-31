@@ -21,7 +21,4 @@ torch>=2.0.0
 # Utilities
 python-dotenv>=1.0.0
 requests>=2.31.0
-
-# Optional - only if you really need these
-# Remove extras that cause conflicts - use specific packages instead
-# Instead of pydantic-ai-slim[all], use individual packages
+ddgs
