@@ -10,8 +10,6 @@ def build_model() -> Model:
 
     model_name = "groq:llama-3.3-70b-versatile"
     api_key = os.getenv("GROQ_API_KEY")
-    print("API_KEY:", api_key)
-    print(f"Building model {model_name} with GROQ_API_KEY: {'set' if api_key else 'not set'}")
     if not api_key:
         print("Warning: GROQ_API_KEY environment variable is not set. GROQ model will not work without it.")
         raise ValueError("GROQ_API_KEY environment variable is not set")
