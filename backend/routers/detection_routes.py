@@ -63,7 +63,7 @@ async def detect_text_detailed(
     """
     try:
         # Full fact-check with research
-        research_result = await FactCheckingService.check_text(input.text)
+        research_result = await FactCheckingService.check_text(input)
         
         # Check if verdict generation failed
         if research_result is None:

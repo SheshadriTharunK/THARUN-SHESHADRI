@@ -1,34 +1,22 @@
-fastapi==0.110.0
-uvicorn==0.27.1
-sqlalchemy==2.0.25
-python-jose==3.3.0
-passlib[bcrypt]==1.7.4
-bcrypt==3.2.2
-numpy==1.26.4
-requests==2.31.0
-python-multipart==0.0.9
+# Core FastAPI Stack
+fastapi>=0.115.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0.0
 pydantic-settings>=2.0.0
-duckduckgo-search>=3.9.0
-pydantic-ai>=0.0.1
-logfire>=0.36.0
-transformers==4.30.2
-tokenizers==0.13.3
-huggingface-hub==0.16.4
-fastapi==0.110.0
-uvicorn==0.27.1
-sqlalchemy==2.0.25
-python-jose==3.3.0
-passlib[bcrypt]==1.7.4
-bcrypt==3.2.2
-numpy==1.26.4
-requests==2.31.0
-python-multipart==0.0.9
-pydantic-settings>=2.0.0
-duckduckgo-search>=3.9.0
-pydantic-ai>=0.0.1
-logfire>=0.36.0
-transformers==4.30.2
-tokenizers==0.13.3
-huggingface-hub==0.16.4
-griffecli==2.0.1
-griffelib==2.0.1
+
+# AI/ML Libraries (minimal, compatible versions)
+pydantic-ai>=0.9.0
+anthropic>=0.31.0
+cohere>=5.0.0
+
+# Data Processing
+transformers>=4.40.0
+torch>=2.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Optional - only if you really need these
+# Remove extras that cause conflicts - use specific packages instead
+# Instead of pydantic-ai-slim[all], use individual packages

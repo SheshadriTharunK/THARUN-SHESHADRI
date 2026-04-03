@@ -1,8 +1,11 @@
-import asyncio
+
 import json
+import asyncio
 from pydantic_ai import Agent
-from llm import build_model
 from pydantic import BaseModel, ValidationError
+
+from llm import build_model
+
 
 
 class ClaimVerdict(BaseModel):
@@ -40,41 +43,30 @@ class FactCheckReport(BaseModel):
 
 
 # Verdict generator - synthesizes findings
-verdict_prompt = """CRITICAL: Do NOT use any function syntax like <function=...>. Output ONLY raw JSON.
+verdict_prompt = """You are a fact-checking expert. Analyze the provided text and evidence to generate a comprehensive fact-check report.
 
-Analyze the evidence and return ONLY a JSON object (no markdown, no text):
-{
-  "overall_verdict": "VERIFIED or MOSTLY_ACCURATE or MIXED or LIKELY_FALSE or UNVERIFIABLE",
-  "accuracy_score": [0-100 integer],
-  "verdicts": [
-    {
-      "claim": "claim text",
-      "verdict": "VERIFIED or LIKELY_FALSE or PARTIALLY_TRUE or UNVERIFIABLE",
-      "confidence": [1-100 integer],
-      "reasoning": "explain why",
-      "evidence_summary": "key evidence"
-    }
-  ],
-  "summary": "brief summary",
-  "recommendations": "what to check"
-}
+Based on the original text and gathered evidence, create a fact-check report with the following structure:
 
-Rules:
-- Return ONLY JSON in the response
-- Do NOT try to call any functions
-- Do NOT use <function=> syntax
-- All fields must be present
-- accuracy_score must be a number 0-100
-- confidence must be a number 1-100
-- verdicts array must have at least one item
-"""
+- overall_verdict: One of VERIFIED, MOSTLY_ACCURATE, MIXED, LIKELY_FALSE, or UNVERIFIABLE
+- accuracy_score: An integer 0-100 representing overall accuracy
+- verdicts: A list of individual claim verdicts, each with:
+  - claim: The claim text
+  - verdict: VERIFIED, LIKELY_FALSE, PARTIALLY_TRUE, or UNVERIFIABLE
+  - confidence: Integer 1-100
+  - reasoning: Brief explanation
+  - evidence_summary: Key evidence points
+- summary: Executive summary
+- recommendations: Further verification suggestions
+
+Be thorough but concise. Base your analysis on the evidence provided."""
 
 verdict_agent = Agent(
     name="VerdictAgent",
     model=build_model(),
     system_prompt=verdict_prompt,
     tools=[],
-    retries=3,
+    retries=5,
+    output_type=FactCheckReport
 )
 
 
@@ -83,7 +75,11 @@ async def parse_verdict_output(result) -> FactCheckReport:
     try:
         # Handle AgentRunResult object - extract the output attribute
         if hasattr(result, 'output'):
-            text = result.output
+            output = result.output
+            # If output is already FactCheckReport, return it
+            if isinstance(output, FactCheckReport):
+                return output
+            text = output
         else:
             text = str(result)
             

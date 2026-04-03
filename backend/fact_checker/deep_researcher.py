@@ -7,6 +7,8 @@ import logfire
 import time
 from dotenv import load_dotenv
 import os 
+
+
 load_dotenv(override = True)
 
 

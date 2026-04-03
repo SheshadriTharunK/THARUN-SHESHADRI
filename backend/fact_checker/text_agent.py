@@ -33,6 +33,7 @@ claim_extractor_agent = Agent(
     model=build_model(),
     system_prompt=system_prompt,
     retries=3,
+    output_type=ClaimsExtraction
 )
 
 
@@ -41,7 +42,11 @@ async def parse_claims_output(result) -> ClaimsExtraction:
     try:
         # Handle AgentRunResult object - extract the output attribute
         if hasattr(result, 'output'):
-            text = result.output
+            output = result.output
+            # If output is already ClaimsExtraction, return it
+            if isinstance(output, ClaimsExtraction):
+                return output
+            text = output
         else:
             text = str(result)
             
@@ -87,7 +92,7 @@ def fallback_claims_extraction(text: str) -> ClaimsExtraction:
 
 async def main(text: str):
     result = await claim_extractor_agent.run(text)
-    print(result.data)
+    print(result.output)
 
 
 if __name__ == "__main__":

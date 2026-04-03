@@ -1,16 +1,20 @@
 from typing import cast
 from pydantic_ai.models import Model
 from pydantic_ai.settings import ModelSettings
-# from config_reader import *
-from dotenv import load_dotenv
 import os 
-
-load_dotenv(override = True)
+from dotenv import load_dotenv
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path=dotenv_path, override=True)
 
 def build_model() -> Model:
 
     model_name = "groq:llama-3.3-70b-versatile"
     api_key = os.getenv("GROQ_API_KEY")
+    print("API_KEY:", api_key)
+    print(f"Building model {model_name} with GROQ_API_KEY: {'set' if api_key else 'not set'}")
+    if not api_key:
+        print("Warning: GROQ_API_KEY environment variable is not set. GROQ model will not work without it.")
+        raise ValueError("GROQ_API_KEY environment variable is not set")
     base_url = ""
     temperature = 0.0
     max_tokens = 1024

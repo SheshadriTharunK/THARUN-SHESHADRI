@@ -32,6 +32,7 @@ fact_planner_agent = Agent(
     model=build_model(),
     system_prompt=fact_planner_prompt,
     retries=3,
+    output_type=VerificationPlan
 )
 
 
@@ -40,7 +41,11 @@ async def parse_verification_plan(result) -> VerificationPlan:
     try:
         # Handle AgentRunResult object - extract the output attribute
         if hasattr(result, 'output'):
-            text = result.output
+            output = result.output
+            # If output is already VerificationPlan, return it
+            if isinstance(output, VerificationPlan):
+                return output
+            text = output
         else:
             text = str(result)
             
@@ -99,7 +104,7 @@ evidence_searcher_agent = Agent(
 
 async def main(text: str):
     result = await evidence_searcher_agent.run(text)
-    print(result.data)
+    print(result.output)
 
 
 if __name__ == "__main__":
