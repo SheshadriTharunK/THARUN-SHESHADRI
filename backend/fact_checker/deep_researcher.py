@@ -17,7 +17,6 @@ class FactChecker:
         # Only configure logfire if token is provided
         logfire_token = os.getenv("logfire_token")
         if logfire_token :
-            print("Configuring Logfire for observability...", logfire_token )
             logfire.configure(token=logfire_token)
             time.sleep(1)
             logfire.instrument_pydantic_ai()
