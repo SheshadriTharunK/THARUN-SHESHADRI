@@ -31,9 +31,19 @@ def _map_to_user_friendly(research_result):
         "high" if score >= 75 else "medium" if score >= 50 else "low"
     )
 
-    first_claim = research_result.verdicts[0] if research_result.verdicts else None
-    claim_text = first_claim.claim if first_claim else "Content could not be parsed"
-    claim_verdict = first_claim.verdict if first_claim else "UNVERIFIABLE"
+    first_claim = None
+    if research_result.verdicts and len(research_result.verdicts) > 0:
+        first_claim = research_result.verdicts[0]
+    
+    # Safe extraction of claim details
+    if first_claim:
+        claim_text = first_claim.claim if hasattr(first_claim, 'claim') else "Content could not be parsed"
+        claim_verdict = first_claim.verdict if hasattr(first_claim, 'verdict') else "UNVERIFIABLE"
+        claim_reasoning = first_claim.reasoning if hasattr(first_claim, 'reasoning') else "No detailed reasoning available"
+    else:
+        claim_text = "Content could not be parsed"
+        claim_verdict = "UNVERIFIABLE"
+        claim_reasoning = "No detailed reasoning available"
 
     return {
         "status": status,
