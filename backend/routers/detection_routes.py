@@ -99,6 +99,7 @@ async def detect_text_detailed(
         }
         
     except Exception as e:
+        print(f"Error during detection: {e}")
         # Fallback to quick detection if fact-checker fails
         return {
             "research_verdict": {"error": "Analysis failed due to service error"},

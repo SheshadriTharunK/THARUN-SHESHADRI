@@ -20,7 +20,9 @@ class FactChecker:
         # Only configure logfire if token is provided
         logfire_token = os.getenv("logfire_token")
         if logfire_token :
-            logfire.configure(token=logfire_token)
+            logfire.configure(token=logfire_token,
+                              send_to_logfire = True,
+                              service_name = "https://tharun-sheshadri.onrender.com/")
             time.sleep(1)
             logfire.instrument_pydantic_ai()
             logfire.instrument_openai()
