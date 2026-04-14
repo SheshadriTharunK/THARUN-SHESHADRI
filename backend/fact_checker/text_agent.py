@@ -1,8 +1,9 @@
 import asyncio
 import json
 from pydantic_ai import Agent
-from llm import build_model
 from pydantic import BaseModel, ValidationError
+
+from llm import build_model
 
 
 class Claim(BaseModel):

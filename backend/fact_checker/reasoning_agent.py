@@ -1,6 +1,5 @@
 
 import json
-import asyncio
 from pydantic_ai import Agent
 from pydantic import BaseModel, ValidationError
 
@@ -45,8 +44,9 @@ class FactCheckReport(BaseModel):
 # Verdict generator - synthesizes findings
 verdict_prompt = """You are a fact-checking expert. Analyze the provided text and evidence to generate a comprehensive fact-check report.
 
-Based on the original text and gathered evidence, create a fact-check report with the following structure:
+Return only a single valid JSON object with the exact fields described below. Do not include any markdown, code fences, or extra explanation.
 
+The JSON object must include:
 - overall_verdict: One of VERIFIED, MOSTLY_ACCURATE, MIXED, LIKELY_FALSE, or UNVERIFIABLE
 - accuracy_score: An integer 0-100 representing overall accuracy
 - verdicts: A list of individual claim verdicts, each with:
@@ -58,6 +58,23 @@ Based on the original text and gathered evidence, create a fact-check report wit
 - summary: Executive summary
 - recommendations: Further verification suggestions
 
+Example JSON output:
+{
+  "overall_verdict": "MOSTLY_ACCURATE",
+  "accuracy_score": 80,
+  "verdicts": [
+    {
+      "claim": "Example claim",
+      "verdict": "VERIFIED",
+      "confidence": 90,
+      "reasoning": "Evidence strongly supports the claim.",
+      "evidence_summary": "Multiple credible sources confirm the claim."
+    }
+  ],
+  "summary": "The evidence indicates the claim is mostly accurate.",
+  "recommendations": "Verify using primary sources for full confidence."
+}
+
 Be thorough but concise. Base your analysis on the evidence provided."""
 
 verdict_agent = Agent(
@@ -65,8 +82,7 @@ verdict_agent = Agent(
     model=build_model(),
     system_prompt=verdict_prompt,
     tools=[],
-    retries=5,
-    output_type=FactCheckReport
+    retries=0,
 )
 
 
@@ -79,6 +95,9 @@ async def parse_verdict_output(result) -> FactCheckReport:
             # If output is already FactCheckReport, return it
             if isinstance(output, FactCheckReport):
                 return output
+            # If output is already parsed JSON/dict, use it directly
+            if isinstance(output, dict):
+                return FactCheckReport(**output)
             text = output
         else:
             text = str(result)
@@ -160,5 +179,3 @@ def fallback_verdict(claims_text: str, evidence_text: str) -> FactCheckReport:
     )
 
 
-# Keep old naming for backwards compatibility
-report_agent = verdict_agent
