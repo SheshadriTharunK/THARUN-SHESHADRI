@@ -6,8 +6,8 @@ from auth import get_current_user
 router = APIRouter(prefix="/detect", tags=["Detection"])
 
 
-class NewsInput(BaseModel):
-    text: str
+# class NewsInput(BaseModel):
+#     text: str
 
 
 
@@ -60,7 +60,7 @@ def _map_to_user_friendly(research_result):
 
 @router.post("/analyze")
 async def detect_text_detailed(
-    input: NewsInput,
+    input: str,
     user: str = Depends(get_current_user)
 ):
     """
@@ -74,7 +74,7 @@ async def detect_text_detailed(
     try:
         # Full fact-check with research
         research_result = await FactCheckingService.check_text(input)
-        
+        print("Full research result:", research_result)
         # Check if verdict generation failed
         if research_result is None:
             return {
@@ -98,7 +98,7 @@ async def detect_text_detailed(
             if combined_score > 50
             else "This content contains significant misinformation - most claims are not supported."
         )
-
+        print("Calling _map_to_user_friendly with research_result:", research_result)
         user_friendly = _map_to_user_friendly(research_result)
         
         return {
