@@ -155,7 +155,7 @@ def fallback_verdict(claims_text: str, evidence_text: str) -> FactCheckReport:
 
     # Create a single claim verdict
     claim_verdict = ClaimVerdict(
-        claim=claims_text[:100] if claims_text else "Content analysis",
+        claim=claims_text if claims_text else "Content analysis",
         verdict="PARTIALLY_TRUE" if overall_verdict == "MIXED" else ("VERIFIED" if overall_verdict == "MOSTLY_ACCURATE" else "UNVERIFIABLE"),
         confidence=65,
         reasoning=user_friendly_reasoning,
