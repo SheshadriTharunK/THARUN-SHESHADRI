@@ -7,8 +7,8 @@ import os
 from dotenv import load_dotenv
 
 from fact_checker.claim_extractor_agent import claim_extractor_agent, ClaimsExtraction, parse_claims_output, fallback_claims_extraction
-from backend.fact_checker.evidence_agent import fact_planner_agent, evidence_searcher_agent, VerificationPlan, parse_verification_plan, fallback_verification_plan
-from backend.fact_checker.verdict_generator import verdict_agent, FactCheckReport, parse_verdict_output, fallback_verdict
+from fact_checker.evidence_agent import fact_planner_agent, evidence_searcher_agent, VerificationPlan, parse_verification_plan, fallback_verification_plan
+from fact_checker.verdict_generator import verdict_agent, FactCheckReport, parse_verdict_output, fallback_verdict
 
 
 
