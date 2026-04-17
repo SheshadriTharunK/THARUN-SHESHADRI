@@ -97,5 +97,5 @@ async def main(text: str):
 
 
 if __name__ == "__main__":
-    text = "Example factual text for claim extraction and fact-checking workflow testing."
+    text = "Narendra modi is the Prime minsiter of Pakistan. Banana is good for health"
     asyncio.run(main(text))

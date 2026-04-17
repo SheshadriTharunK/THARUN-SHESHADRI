@@ -63,7 +63,7 @@ async def detect_text_detailed(
      body: NewsInput,
     user: str = Depends(get_current_user)
 ):
-    input_text = body.text
+    input_text = body
     """
     Detailed fact-checking with web research (slower but more thorough).
     
