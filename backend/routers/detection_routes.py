@@ -8,9 +8,7 @@ router = APIRouter(prefix="/detect", tags=["Detection"])
 
 class NewsInput(BaseModel):
     text: str
-
-
-
+    
 def _map_to_user_friendly(research_result):
     """Convert structured fact-check report into naïve-user-friendly fields."""
     score = research_result.accuracy_score
@@ -57,13 +55,12 @@ def _map_to_user_friendly(research_result):
         "note": "This is informational and not final. Verify with trusted sources before sharing."
     }
 
-
 @router.post("/analyze")
 async def detect_text_detailed(
      body: NewsInput,
     user: str = Depends(get_current_user)
 ):
-    input_text = body
+    input_text = body.text
     """
     Detailed fact-checking with web research (slower but more thorough).
     
