@@ -108,5 +108,5 @@ async def main(text: str):
 
 
 if __name__ == "__main__":
-    query = "Example claim used to verify evidence collection and summary of sources."
+    query = "Narendra modi is the Prime minister of America."
     asyncio.run(main(query))

@@ -9,8 +9,6 @@ router = APIRouter(prefix="/detect", tags=["Detection"])
 class NewsInput(BaseModel):
     text: str
 
-
-
 def _map_to_user_friendly(research_result):
     """Convert structured fact-check report into naïve-user-friendly fields."""
     score = research_result.accuracy_score
@@ -31,9 +29,19 @@ def _map_to_user_friendly(research_result):
         "high" if score >= 75 else "medium" if score >= 50 else "low"
     )
 
-    first_claim = research_result.verdicts[0] if research_result.verdicts else None
-    claim_text = first_claim.claim if first_claim else "Content could not be parsed"
-    claim_verdict = first_claim.verdict if first_claim else "UNVERIFIABLE"
+    first_claim = None
+    if research_result.verdicts and len(research_result.verdicts) > 0:
+        first_claim = research_result.verdicts[0]
+
+    # Safe extraction of claim details
+    if first_claim:
+        claim_text = first_claim.claim if hasattr(first_claim, 'claim') else "Content could not be parsed"
+        claim_verdict = first_claim.verdict if hasattr(first_claim, 'verdict') else "UNVERIFIABLE"
+        claim_reasoning = first_claim.reasoning if hasattr(first_claim, 'reasoning') else "No detailed reasoning available"
+    else:
+        claim_text = "Content could not be parsed"
+        claim_verdict = "UNVERIFIABLE"
+        claim_reasoning = "No detailed reasoning available"
 
     return {
         "status": status,
@@ -47,24 +55,23 @@ def _map_to_user_friendly(research_result):
         "note": "This is informational and not final. Verify with trusted sources before sharing."
     }
 
-
 @router.post("/analyze")
 async def detect_text_detailed(
-    input: NewsInput,
+     body: NewsInput,
     user: str = Depends(get_current_user)
 ):
+    input_text = body.text
     """
     Detailed fact-checking with web research (slower but more thorough).
     
     Returns:
-    - Quick ML verdict
     - Full fact-check report with extracted claims and evidence
     - Combined accuracy score
     """
     try:
         # Full fact-check with research
-        research_result = await FactCheckingService.check_text(input)
-        
+        research_result = await FactCheckingService.check_text(input_text)
+        print("Full research result:", research_result)
         # Check if verdict generation failed
         if research_result is None:
             return {
@@ -88,7 +95,7 @@ async def detect_text_detailed(
             if combined_score > 50
             else "This content contains significant misinformation - most claims are not supported."
         )
-
+        print("Calling _map_to_user_friendly with research_result:", research_result)
         user_friendly = _map_to_user_friendly(research_result)
         
         return {
@@ -99,6 +106,7 @@ async def detect_text_detailed(
         }
         
     except Exception as e:
+        print(f"Error during detection: {e}")
         # Fallback to quick detection if fact-checker fails
         return {
             "research_verdict": {"error": "Analysis failed due to service error"},

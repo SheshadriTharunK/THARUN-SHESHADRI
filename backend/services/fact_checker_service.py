@@ -9,7 +9,7 @@ from pathlib import Path
 research_path = Path(__file__).parent.parent / "fact_checker"
 sys.path.insert(0, str(research_path))
 
-from fact_checker.deep_researcher import FactChecker
+from fact_checker.fact_checker_orchestrator import FactChecker
 
 
 class FactCheckingService:

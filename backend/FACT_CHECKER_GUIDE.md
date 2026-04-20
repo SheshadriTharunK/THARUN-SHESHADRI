@@ -90,11 +90,9 @@ Returns: `FactCheckReport` with verdicts, accuracy scores, evidence
 ### 4. **Detection Routes** (routers/detection_routes.py)
 
 #### Endpoints:
-1. **POST `/detect/text`** - Quick ML-only detection (instant, no research)
-   - Uses BERT model only
-   - Response: `{label, confidence, trust_score, explanation}`
 
-2. **POST `/detect/analyze`** - Full fact-check with research (slower, thorough)
+
+1**POST `/detect/analyze`** - Full fact-check with research (slower, thorough)
    - Combines BERT + full FactChecker pipeline
    - Response: `{ml_verdict, research_verdict, combined_score, recommendation}`
 
@@ -102,10 +100,6 @@ Returns: `FactCheckReport` with verdicts, accuracy scores, evidence
 
 #### Example Request:
 ```bash
-# Quick detection
-POST /detect/text
-{"text": "Paris is the capital of France"}
-
 # Detailed analysis
 POST /detect/analyze
 {"text": "Paris is the capital of France and it rains every day"}
