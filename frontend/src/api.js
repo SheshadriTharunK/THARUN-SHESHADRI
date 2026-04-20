@@ -1,4 +1,4 @@
-const BASE_URL = "https://tharun-sheshadri.onrender.com";
+const BASE_URL = "https://truthshield-ai-fu0b.onrender.com";
 
 export async function registerUser(email, password) {
   const res = await fetch(`${BASE_URL}/auth/register`, {
