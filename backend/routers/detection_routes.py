@@ -65,7 +65,6 @@ async def detect_text_detailed(
     Detailed fact-checking with web research (slower but more thorough).
     
     Returns:
-    - Quick ML verdict
     - Full fact-check report with extracted claims and evidence
     - Combined accuracy score
     """
