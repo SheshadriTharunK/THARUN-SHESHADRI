@@ -1,10 +1,22 @@
+import json 
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
 from services.fact_checker_service import FactCheckingService
 from auth import get_current_user
+from models import  UserHistory
+from database import SessionLocal
 
 router = APIRouter(prefix="/detect", tags=["Detection"])
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 class NewsInput(BaseModel):
     text: str
@@ -57,9 +69,11 @@ def _map_to_user_friendly(research_result):
 
 @router.post("/analyze")
 async def detect_text_detailed(
-     body: NewsInput,
-    user: str = Depends(get_current_user)
+    body: NewsInput,
+    user = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
+    print("Current user:", user)
     input_text = body.text
     """
     Detailed fact-checking with web research (slower but more thorough).
@@ -97,7 +111,15 @@ async def detect_text_detailed(
         )
         print("Calling _map_to_user_friendly with research_result:", research_result)
         user_friendly = _map_to_user_friendly(research_result)
-        
+        history_entry = UserHistory(
+        user_id=user,   
+        input_text=input_text,
+        result=json.dumps(user_friendly)
+    )
+
+        db.add(history_entry)
+        db.commit()
+        print("Saved user history entry:", history_entry)
         return {
             "research_verdict": research_result.model_dump(),
             "combined_score": combined_score,
