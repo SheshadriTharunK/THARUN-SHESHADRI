@@ -32,3 +32,16 @@ export async function analyzeText(text, token) {
   });
   return res.json();
 }
+
+export async function chatWithAI(message, token) {
+  const res = await fetch(`${BASE_URL}/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ message })
+  });
+
+  return res.json();
+}

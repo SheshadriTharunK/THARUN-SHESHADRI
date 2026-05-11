@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import auth_routes, detection_routes
+from routers import auth_routes, detection_routes, chat_routes
 import models
 from database import engine
 
@@ -9,7 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.include_router(auth_routes.router)
 app.include_router(detection_routes.router)
-
+from routers import chat_routes
+app.include_router(chat_routes.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

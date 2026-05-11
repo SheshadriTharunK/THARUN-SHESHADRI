@@ -143,3 +143,25 @@ async def detect_text_detailed(
         }
 
 
+
+@router.get("/history")
+def get_user_history(
+    user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    try:
+        history = db.query(UserHistory)\
+                    .filter(UserHistory.user_id == user)\
+                    .order_by(UserHistory.id.desc())\
+                    .all()
+        result = []
+        for item in history:
+            result.append({
+                "id": item.id,
+                "input_text": item.input_text,
+                "result": json.loads(item.result)  # convert string → JSON
+            })
+        return result
+
+    except Exception as e:
+        return {"error": str(e)}
